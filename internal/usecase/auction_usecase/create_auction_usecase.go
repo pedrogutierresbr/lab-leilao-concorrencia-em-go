@@ -5,7 +5,9 @@ import (
 	"time"
 
 	"github.com/pedrogutierresbr/lab-leilao-concorrencia-em-go/internal/entity/auction_entity"
+	"github.com/pedrogutierresbr/lab-leilao-concorrencia-em-go/internal/entity/bid_entity"
 	"github.com/pedrogutierresbr/lab-leilao-concorrencia-em-go/internal/internal_error"
+	"github.com/pedrogutierresbr/lab-leilao-concorrencia-em-go/internal/usecase/bid_usecase"
 )
 
 type AuctionInputDTO struct {
@@ -25,6 +27,11 @@ type AuctionOutputDTO struct {
 	Timestamp   time.Time        `json:"timestamp" time_format:"2006-01-02 15:04:05"`
 }
 
+type WinningInfoOutputDTO struct {
+	Auction AuctionOutputDTO          `json:"auction"`
+	Bid     *bid_usecase.BidOutputDTO `json:"bid,omitempty"`
+}
+
 type ProductCondition int64
 type AuctionStatus int64
 
@@ -32,10 +39,12 @@ type AuctionUseCaseInterface interface {
 	CreateAuction(ctx context.Context, auctionInput AuctionInputDTO) *internal_error.InternalError
 	FindAuctionById(ctx context.Context, id string) (*AuctionOutputDTO, *internal_error.InternalError)
 	FindAuctions(ctx context.Context, status AuctionStatus, category, productName string) ([]AuctionOutputDTO, *internal_error.InternalError)
+	FindWinningBidByAuctionId(ctx context.Context, auctionId string) (*WinningInfoOutputDTO, *internal_error.InternalError)
 }
 
 type AuctionUseCase struct {
 	auctionRepositoryInterface auction_entity.AuctionRepositoryInterface
+	bidRepositoryInterface     bid_entity.BidEntityRepository
 }
 
 func (au *AuctionUseCase) CreateAuction(ctx context.Context, auctionInput AuctionInputDTO) *internal_error.InternalError {
