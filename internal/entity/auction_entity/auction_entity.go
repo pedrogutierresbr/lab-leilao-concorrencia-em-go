@@ -52,7 +52,7 @@ type ProductCondition int
 type AuctionStatus int
 
 const (
-	New ProductCondition = iota
+	New ProductCondition = iota + 1
 	Used
 	Refurbished
 )
