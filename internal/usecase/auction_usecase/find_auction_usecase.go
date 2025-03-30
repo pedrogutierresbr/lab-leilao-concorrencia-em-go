@@ -27,8 +27,8 @@ func (au *AuctionUseCase) FindAuctionById(ctx context.Context, id string) (*Auct
 }
 
 func (au *AuctionUseCase) FindAuctions(ctx context.Context, status AuctionStatus, category, productName string) ([]AuctionOutputDTO, *internal_error.InternalError) {
-	auctionEntities, err := au.auctionRepositoryInterface.FindAuctions(ctx, auction_entity.AuctionStatus(status), category, productName)
-
+	auctionEntities, err := au.auctionRepositoryInterface.FindAuctions(
+		ctx, auction_entity.AuctionStatus(status), category, productName)
 	if err != nil {
 		return nil, err
 	}

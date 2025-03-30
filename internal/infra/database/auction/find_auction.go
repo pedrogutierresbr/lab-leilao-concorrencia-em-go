@@ -17,7 +17,7 @@ func (ar *AuctionRepository) FindAuctionById(ctx context.Context, id string) (*a
 
 	var auctionEntityMongo AuctionEntityMongo
 	if err := ar.Collection.FindOne(ctx, filter).Decode(&auctionEntityMongo); err != nil {
-		logger.Error(fmt.Sprintf("Error trying to find auction by id %s", id), err)
+		logger.Error(fmt.Sprintf("Error trying to find auction by id = %s", id), err)
 		return nil, internal_error.NewInternalServerError("Error trying to find auction by id")
 	}
 
@@ -32,7 +32,7 @@ func (ar *AuctionRepository) FindAuctionById(ctx context.Context, id string) (*a
 	}, nil
 }
 
-func (ar *AuctionRepository) FindAuctions(ctx context.Context, status auction_entity.AuctionStatus, category, productName string) ([]auction_entity.Auction, *internal_error.InternalError) {
+func (repo *AuctionRepository) FindAuctions(ctx context.Context, status auction_entity.AuctionStatus, category string, productName string) ([]auction_entity.Auction, *internal_error.InternalError) {
 	filter := bson.M{}
 
 	if status != 0 {
@@ -44,37 +44,34 @@ func (ar *AuctionRepository) FindAuctions(ctx context.Context, status auction_en
 	}
 
 	if productName != "" {
-		filter["product_name"] = primitive.Regex{
-			Pattern: productName,
-			Options: "i",
-		}
+		filter["productName"] = primitive.Regex{Pattern: productName, Options: "i"}
 	}
 
-	cursor, err := ar.Collection.Find(ctx, filter)
+	cursor, err := repo.Collection.Find(ctx, filter)
 	if err != nil {
-		logger.Error("Error trying to find auctions", err)
-		return nil, internal_error.NewInternalServerError("Error trying to find auctions")
+		logger.Error("Error finding auctions", err)
+		return nil, internal_error.NewInternalServerError("Error finding auctions")
 	}
 	defer cursor.Close(ctx)
 
-	var auctionEntityMongo []AuctionEntityMongo
-	if err := cursor.All(ctx, &auctionEntityMongo); err != nil {
-		logger.Error("Error trying to find auctions", err)
-		return nil, internal_error.NewInternalServerError("Error trying to find auctions")
+	var auctionsMongo []AuctionEntityMongo
+	if err := cursor.All(ctx, &auctionsMongo); err != nil {
+		logger.Error("Error decoding auctions", err)
+		return nil, internal_error.NewInternalServerError("Error decoding auctions")
 	}
 
-	var auctionEntity []auction_entity.Auction
-	for _, auctionMongo := range auctionEntityMongo {
-		auctionEntity = append(auctionEntity, auction_entity.Auction{
-			Id:          auctionMongo.Id,
-			ProductName: auctionMongo.ProductName,
-			Category:    auctionMongo.Category,
-			Description: auctionMongo.Description,
-			Condition:   auctionMongo.Condition,
-			Status:      auctionMongo.Status,
-			Timestamp:   time.Unix(auctionMongo.Timestamp, 0),
+	var auctionsEntity []auction_entity.Auction
+	for _, auction := range auctionsMongo {
+		auctionsEntity = append(auctionsEntity, auction_entity.Auction{
+			Id:          auction.Id,
+			ProductName: auction.ProductName,
+			Category:    auction.Category,
+			Status:      auction.Status,
+			Description: auction.Description,
+			Condition:   auction.Condition,
+			Timestamp:   time.Unix(auction.Timestamp, 0),
 		})
 	}
 
-	return auctionEntity, nil
+	return auctionsEntity, nil
 }

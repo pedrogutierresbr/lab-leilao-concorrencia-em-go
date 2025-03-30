@@ -5,7 +5,9 @@ import (
 	"go.uber.org/zap/zapcore"
 )
 
-var log *zap.Logger
+var (
+	log *zap.Logger
+)
 
 func init() {
 	logConfiguration := zap.Config{
@@ -24,7 +26,7 @@ func init() {
 	log, _ = logConfiguration.Build()
 }
 
-func Info(message string, err error, tags ...zap.Field) {
+func Info(message string, tags ...zap.Field) {
 	log.Info(message, tags...)
 	log.Sync()
 }

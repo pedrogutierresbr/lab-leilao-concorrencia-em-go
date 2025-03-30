@@ -52,14 +52,14 @@ type ProductCondition int
 type AuctionStatus int
 
 const (
-	New ProductCondition = iota + 1
-	Used
-	Refurbished
+	Active AuctionStatus = iota
+	Completed
 )
 
 const (
-	Active AuctionStatus = iota
-	Completed
+	New ProductCondition = iota + 1
+	Used
+	Refurbished
 )
 
 type AuctionRepositoryInterface interface {

@@ -35,7 +35,8 @@ func (ur *UserRepository) FindUserById(ctx context.Context, userId string) (*use
 	if err != nil {
 		if errors.Is(err, mongo.ErrNoDocuments) {
 			logger.Error(fmt.Sprintf("User not found with this id = %s", userId), err)
-			return nil, internal_error.NewNotFoundError(fmt.Sprintf("User not found with this id = %s", userId))
+			return nil, internal_error.NewNotFoundError(
+				fmt.Sprintf("User not found with this id = %s", userId))
 		}
 
 		logger.Error("Error trying to find user by userId", err)

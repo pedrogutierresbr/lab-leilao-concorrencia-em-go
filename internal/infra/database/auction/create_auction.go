@@ -18,7 +18,6 @@ type AuctionEntityMongo struct {
 	Status      auction_entity.AuctionStatus    `bson:"status"`
 	Timestamp   int64                           `bson:"timestamp"`
 }
-
 type AuctionRepository struct {
 	Collection *mongo.Collection
 }
@@ -29,7 +28,7 @@ func NewAuctionRepository(database *mongo.Database) *AuctionRepository {
 	}
 }
 
-func (ar *AuctionRepository) CreateAuction(ctx context.Context, auctionEntity auction_entity.Auction) *internal_error.InternalError {
+func (ar *AuctionRepository) CreateAuction(ctx context.Context, auctionEntity *auction_entity.Auction) *internal_error.InternalError {
 	auctionEntityMongo := &AuctionEntityMongo{
 		Id:          auctionEntity.Id,
 		ProductName: auctionEntity.ProductName,
@@ -39,7 +38,6 @@ func (ar *AuctionRepository) CreateAuction(ctx context.Context, auctionEntity au
 		Status:      auctionEntity.Status,
 		Timestamp:   auctionEntity.Timestamp.Unix(),
 	}
-
 	_, err := ar.Collection.InsertOne(ctx, auctionEntityMongo)
 	if err != nil {
 		logger.Error("Error trying to insert auction", err)
