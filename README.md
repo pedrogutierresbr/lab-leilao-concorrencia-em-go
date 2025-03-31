@@ -120,5 +120,6 @@ $  go  test  -v  internal/infra/database/auction/create_auction_test.go
 
 ## Licença
 
-Este projeto esta sobe a licença [MIT](./LICENSE).
+Este projeto esta sobe a licença [MIT](./LICENSE). 
+<br>
 Feito por Pedro Gutierres [Entre em contato!](https://www.linkedin.com/in/pedrogabrielgutierres/)
