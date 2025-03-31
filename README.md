@@ -56,7 +56,7 @@ $  git  clone  https://github.com/pedrogutierresbr/lab-leilao-concorrencia-em-go
 
 $  docker-compose  up  -d
 
-# Para pausar a aplicação
+# Parar e remover recursos da aplicação
 
 $  docker-compose  down
 
