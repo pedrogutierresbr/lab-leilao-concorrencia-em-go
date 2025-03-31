@@ -1,5 +1,7 @@
 ### Criar leilão
 POST http://localhost:8080/auction
+Host: localhost:8000
+Content-Type: application/json
 
 {
 "product_name": "tuf gaming f15",
@@ -11,7 +13,11 @@ POST http://localhost:8080/auction
 ### Buscar leilões
 
 GET http://localhost:8080/auction?status=0
+Host: localhost:8000
+Content-Type: application/json
 
 ### Buscar leilão por id
 
 GET http://localhost:8080/auction/winner/:id
+Host: localhost:8000
+Content-Type: application/json
