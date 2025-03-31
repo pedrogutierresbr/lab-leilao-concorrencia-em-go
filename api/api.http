@@ -1,0 +1,17 @@
+### Criar leilão
+POST http://localhost:8080/auction
+
+{
+"product_name": "tuf gaming f15",
+"category": "computadores",
+"description": "auction computadores description",
+"condition": 0
+}
+
+### Buscar leilões
+
+GET http://localhost:8080/auction?status=0
+
+### Buscar leilão por id
+
+GET http://localhost:8080/auction/winner/:id
